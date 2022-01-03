@@ -6,12 +6,13 @@
 
 ## API
 
-GET "/api/v1/tasks"             - get all tasks
-POST "/api/v1/tasks"            - create new task
-GET "/api/v1/tasks/:id"         - get single task
-PATCH "/api/v1/tasks/:id"       - update task
-DELETE "/api/v1/tasks/:id"      - delete task
+- GET "/api/v1/tasks"             => get all tasks
+- POST "/api/v1/tasks"            => create new task
+- GET "/api/v1/tasks/:id"         => get single task
+- PATCH "/api/v1/tasks/:id"       => update task
+- DELETE "/api/v1/tasks/:id"      => delete task
 
 ## Front End
 
-![screenshot](https://github.com/AshishS-1123/express-mongoose-tasks/blob/master/screenshot.png?raw=true)
+![](https://github.com/AshishS-1123/express-mongoose-tasks/blob/master/screenshot.png?raw=true)
+![](https://user-images.githubusercontent.com/64722310/147952533-45e3f69d-ef46-4d30-adec-de29468529f8.png)
