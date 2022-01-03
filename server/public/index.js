@@ -8,8 +8,17 @@ const errorContainer = document.getElementById("error_text");
 
 // DOM Elements for showing tasks.
 const taskContainer = document.querySelector(".task_container");
+
+// DOM Elements for editing tasks.
+const taskEditor = document.querySelector(".editor_container");
+const editorIdInput = document.getElementById("id_input");
+const editorNameInput = document.getElementById("title_input");
+const editorCompletedInput = document.getElementById("completed_input");
+const editorSubmitButton = document.querySelector(".editor button");
+
 taskContainer.innerHTML = "";
 
+// EDIT and DELETE
 taskContainer.addEventListener("click", (event) => {
   // Check if one of the buttons was clicked.
   if (event.target.localName != "button") {
@@ -39,9 +48,45 @@ taskContainer.addEventListener("click", (event) => {
     })
   } else {
     // Edit Task.
+    taskEditor.style.visibility = "visible";
+
+    // fetch the task datails from server.
+    const url = `/tasks/${taskId}`;
+    makeRequest(url, "GET", {}).then(({ data, status }) => {
+      if (status != 201)
+        return;
+
+      editorIdInput.value = data.task._id;
+      editorNameInput.value = data.task.name;
+      editorCompletedInput.value = data.task.completed;
+      taskEditor.dataset.task = String(taskId);
+    })
   }
 })
 
+editorSubmitButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  console.log("Clicked");
+
+  const newTaskName = editorNameInput.value;
+  const newCompleted = editorCompletedInput.value;
+  const taskId = taskEditor.dataset.task;
+  const body = {
+    name: newTaskName,
+    completed: newCompleted
+  };
+
+
+  const url = `/tasks/${taskId}`;
+
+  makeRequest(url, "PATCH", body).then(({ data, status }) => {
+    taskEditor.style.visibility = "hidden";
+    getAllTasks();
+  })
+
+})
+
+// CREATE
 taskSubmitButton.addEventListener("click", (event) => {
   const taskName = taskInput.value;
 
@@ -90,12 +135,21 @@ async function makeRequest(url, method, body) {
   }
 
   // Get the response.
-  const response = await fetch(url, init);
-  // Convert the response the json.
-  const data = await response.json();
-  const status = response.status;
+  try {
+    const response = await fetch(url, init);
+    const data = await response.json();
+    // Convert the response the json.
+    const status = response.status;
 
-  return { data, status };
+    return { data, status };
+  } catch (error) {
+    return {
+      data: {},
+      status: 501,
+    }
+  }
+
+  return { data: {}, status: 500 };
 }
 
 // Just creates the HTML for the new task.
@@ -109,8 +163,7 @@ function createNewTask(name, itemId, taskId) {
     </div >`
 }
 
-// When the DOM loads, make a get request and fetch all the tasks.
-document.addEventListener("DOMContentLoaded", () => {
+function getAllTasks() {
   makeRequest("/tasks", "GET", null).then(({ data }) => {
     let innerHTML = "";
     data.tasks.forEach((item, idx) => {
@@ -120,4 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
     task_id += data.tasks.length;
     taskContainer.innerHTML = innerHTML;
   })
-})
+}
+
+// GET ALL
+// When the DOM loads, make a get request and fetch all the tasks.
+document.addEventListener("DOMContentLoaded", getAllTasks);

@@ -1,5 +1,9 @@
 function notFound(req, res) {
-  res.status(404).end("404 | Not Found");
+  res.status(404).json({
+    data: {},
+    message: "404 | Not Found",
+    status: 404
+  });
 }
 
 module.exports = notFound;
