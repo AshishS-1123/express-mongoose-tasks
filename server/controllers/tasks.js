@@ -1,7 +1,14 @@
 const Task = require("../models/task");
 
-function getAllTasks(req, res, next) {
-  res.end("in ger all tasks");
+async function getAllTasks(req, res, next) {
+  try {
+    const tasks = await Task.find({});
+    res.status(201).json({ tasks })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
 }
 
 // Controller to create new task.
