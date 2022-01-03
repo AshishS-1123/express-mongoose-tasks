@@ -9,6 +9,7 @@ const app = express();
 const taskRouter = require("./routes/tasks")
 // Middlewares
 const notFound = require("./middleware/notFound")
+const errorHandler = require("./middleware/errorHandler")
 
 // Database connection
 const connectDB = require("./config/configDB")
@@ -24,6 +25,8 @@ app.use("/api/v1/tasks", taskRouter);
 
 // Not Found Page
 app.use(notFound);
+// Error Handler
+app.use(errorHandler);
 
 // Server
 const startServer = async () => {
