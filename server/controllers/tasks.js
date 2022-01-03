@@ -7,8 +7,15 @@ function getAllTasks(req, res, next) {
 // Controller to create new task.
 async function createTask(req, res, next) {
   const { name, completed } = req.body;
-  const task = await Task.create({ name, completed });
-  res.status(201).json({ task });
+
+  try {
+    const task = await Task.create({ name, completed });
+    res.status(201).json({ task });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 }
 
 function getTask(req, res, next) {
