@@ -7,6 +7,8 @@ const app = express();
 
 // Routers
 const taskRouter = require("./routes/tasks")
+// Middlewares
+const notFound = require("./middleware/notFound")
 
 // Database connection
 const connectDB = require("./config/configDB")
@@ -19,6 +21,9 @@ app.use(express.json());
 
 // Routes
 app.use("/api/v1/tasks", taskRouter);
+
+// Not Found Page
+app.use(notFound);
 
 // Server
 const startServer = async () => {
