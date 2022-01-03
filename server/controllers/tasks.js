@@ -17,7 +17,7 @@ async function createTask(req, res, next) {
 
   try {
     const task = await Task.create({ name, completed });
-    res.status(201).json({ task });
+    res.status(201).json({ task, message: "Task Created!" });
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -61,7 +61,7 @@ async function updateTask(req, res, next) {
     }
 
     res.status(200).json({
-      message: "Update Successful !",
+      message: "Update Successful!",
     })
   } catch (error) {
     res.status(500).json({
@@ -81,7 +81,7 @@ async function deleteTask(req, res, next) {
       })
     }
 
-    res.status(201).json({ task });
+    res.status(201).json({ task, message: "Deleted Successfully!" });
   } catch (error) {
     res.status(500).json({
       message: error.message,
