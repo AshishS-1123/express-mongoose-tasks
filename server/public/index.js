@@ -66,7 +66,6 @@ taskContainer.addEventListener("click", (event) => {
 
 editorSubmitButton.addEventListener("click", (event) => {
   event.preventDefault();
-  console.log("Clicked");
 
   const newTaskName = editorNameInput.value;
   const newCompleted = editorCompletedInput.value;
