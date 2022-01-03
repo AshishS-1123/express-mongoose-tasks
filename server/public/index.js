@@ -1,4 +1,5 @@
 const URL = "http://localhost:3000/api/v1";
+let task_id = 0;
 
 // DOM Element for creating tasks.
 const taskSubmitButton = document.querySelector(".form_container button");
@@ -8,6 +9,24 @@ const errorContainer = document.getElementById("error_text");
 // DOM Elements for showing tasks.
 const taskContainer = document.querySelector(".task_container");
 taskContainer.innerHTML = "";
+
+taskContainer.addEventListener("click", (event) => {
+  // Check if one of the buttons was clicked.
+  if (event.target.localName != "button") {
+    return;
+  }
+
+  const itemType = event.target.dataset.type;
+  const itemId = event.target.dataset.item;
+  const taskId = event.target.dataset.task;
+
+  if (itemType == "D") {
+    // Delete Task.
+
+  } else {
+    // Edit Task.
+  }
+})
 
 taskSubmitButton.addEventListener("click", (event) => {
   const taskName = taskInput.value;
@@ -27,8 +46,9 @@ taskSubmitButton.addEventListener("click", (event) => {
   }
 
   // Make request to backend to create a new task.
-  makeRequest("/tasks", "POST", body).then(() => {
-    const newTask = createNewTask(taskName);
+  makeRequest("/tasks", "POST", body).then((data) => {
+    const newTask = createNewTask(taskName, task_id, data._id);
+    ++task_id;
 
     // When the task is created, add it to the view.
     taskContainer.innerHTML += newTask;
@@ -64,12 +84,12 @@ async function makeRequest(url, method, body) {
 }
 
 // Just creates the HTML for the new task.
-function createNewTask(name) {
-  return `<div class="task">
+function createNewTask(name, itemId, taskId) {
+  return `<div class="task"}>
       <h5>${name}</h5 >
     <div>
-      <button>Edit</button>
-      <button>Delete</button>
+      <button data-type="B" data-item=${itemId} data-task=${taskId}>Edit</button>
+      <button data-type="D" data-item=${itemId} data-task=${taskId}>Delete</button>
     </div>
     </div >`
 }
@@ -78,10 +98,11 @@ function createNewTask(name) {
 document.addEventListener("DOMContentLoaded", () => {
   makeRequest("/tasks", "GET", null).then((data) => {
     let innerHTML = "";
-    data.tasks.forEach(item => {
-      innerHTML += createNewTask(item.name);
+    data.tasks.forEach((item, idx) => {
+      innerHTML += createNewTask(item.name, task_id + idx, item._id);
     })
 
+    task_id += data.tasks.length;
     taskContainer.innerHTML = innerHTML;
   })
 })
