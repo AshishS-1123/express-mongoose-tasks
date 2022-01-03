@@ -22,7 +22,21 @@ taskContainer.addEventListener("click", (event) => {
 
   if (itemType == "D") {
     // Delete Task.
+    const url = `/tasks/${taskId}`
+    makeRequest(url, "DELETE", {}).then(({ data, status }) => {
+      if (status == 201) {
+        // If task was deleted in the backend, remove it from the frontend.
+        const element = event.target.parentElement?.parentElement;
+        if (!element)
+          return;
 
+        const parent = element.parentElement;
+        if (!parent)
+          return;
+
+        parent.removeChild(element);
+      }
+    })
   } else {
     // Edit Task.
   }
@@ -46,8 +60,8 @@ taskSubmitButton.addEventListener("click", (event) => {
   }
 
   // Make request to backend to create a new task.
-  makeRequest("/tasks", "POST", body).then((data) => {
-    const newTask = createNewTask(taskName, task_id, data._id);
+  makeRequest("/tasks", "POST", body).then(({ data }) => {
+    const newTask = createNewTask(taskName, task_id, data.task._id);
     ++task_id;
 
     // When the task is created, add it to the view.
@@ -79,13 +93,14 @@ async function makeRequest(url, method, body) {
   const response = await fetch(url, init);
   // Convert the response the json.
   const data = await response.json();
+  const status = response.status;
 
-  return data;
+  return { data, status };
 }
 
 // Just creates the HTML for the new task.
 function createNewTask(name, itemId, taskId) {
-  return `<div class="task"}>
+  return `<div class="task" id=${"task_" + itemId}>
       <h5>${name}</h5 >
     <div>
       <button data-type="B" data-item=${itemId} data-task=${taskId}>Edit</button>
@@ -96,7 +111,7 @@ function createNewTask(name, itemId, taskId) {
 
 // When the DOM loads, make a get request and fetch all the tasks.
 document.addEventListener("DOMContentLoaded", () => {
-  makeRequest("/tasks", "GET", null).then((data) => {
+  makeRequest("/tasks", "GET", null).then(({ data }) => {
     let innerHTML = "";
     data.tasks.forEach((item, idx) => {
       innerHTML += createNewTask(item.name, task_id + idx, item._id);

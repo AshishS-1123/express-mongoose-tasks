@@ -44,8 +44,8 @@ const updateTask = asyncWrapper(async (req, res) => {
 });
 
 const deleteTask = asyncWrapper(async (req, res) => {
-    const { id } = req.params;
-    const task = await Task.findOneAndDelete({ _id: id });
+  const { id } = req.params;
+  const task = await Task.findOneAndDelete({ _id: id });
 
   if (!task) {
     return next(new CustomError(404, "Task does not exist"));
