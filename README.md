@@ -14,4 +14,4 @@ DELETE "/api/v1/tasks/:id"      - delete task
 
 ## Front End
 
-![screenshot]](https://github.com/AshishS-1123/express-mongoose-tasks/blob/master/screenshot.png?raw=true)
+![screenshot](https://github.com/AshishS-1123/express-mongoose-tasks/blob/master/screenshot.png?raw=true)
