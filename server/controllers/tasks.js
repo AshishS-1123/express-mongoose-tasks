@@ -48,8 +48,23 @@ function updateTask(req, res, next) {
   res.end("update task");
 }
 
-function deleteTask(req, res, next) {
-  res.end("delete task");
+async function deleteTask(req, res, next) {
+  try {
+    const { id } = req.params;
+    const task = await Task.findOneAndDelete({ _id: id });
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Task does not exist",
+      })
+    }
+
+    res.status(201).json({ task });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
 }
 
 module.exports = {
