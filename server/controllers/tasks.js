@@ -44,8 +44,30 @@ async function getTask(req, res, next) {
   }
 }
 
-function updateTask(req, res, next) {
-  res.end("update task");
+async function updateTask(req, res, next) {
+  try {
+    const { id } = req.params;
+    const updatedTask = req.body;
+
+    const task = await Task.findOneAndUpdate({ _id: id }, updatedTask, {
+      new: true, // always return the updated task
+      runValidators: true,
+    });
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Task does not exists",
+      });
+    }
+
+    res.status(200).json({
+      message: "Update Successful !",
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
 }
 
 async function deleteTask(req, res, next) {
