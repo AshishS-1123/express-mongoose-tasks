@@ -1,9 +1,14 @@
+const Task = require("../models/task");
+
 function getAllTasks(req, res, next) {
   res.end("in ger all tasks");
 }
 
-function createTask(req, res, next) {
-  res.end("create task");
+// Controller to create new task.
+async function createTask(req, res, next) {
+  const { name, completed } = req.body;
+  const task = await Task.create({ name, completed });
+  res.status(201).json({ task });
 }
 
 function getTask(req, res, next) {
