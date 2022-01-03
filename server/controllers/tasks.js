@@ -1,5 +1,6 @@
 const Task = require("../models/task");
 const asyncWrapper = require("../middleware/async");
+const CustomError = require("../utils/customError")
 
 const getAllTasks = asyncWrapper(async (req, res, next) => {
     const tasks = await Task.find({});
@@ -18,9 +19,7 @@ const getTask = asyncWrapper(async (req, res) => {
   const task = await Task.findOne({ _id: id });
 
   if (!task) {
-    return res.status(404).json({
-      message: "Task does not exist",
-    })
+    return next(new CustomError(404, "Task does not exist"));
   }
 
   res.status(201).json({ task });
@@ -36,9 +35,7 @@ const updateTask = asyncWrapper(async (req, res) => {
   });
 
   if (!task) {
-    return res.status(404).json({
-      message: "Task does not exists",
-    });
+    return next(new CustomError(404, "Task does not exist"));
   }
 
   res.status(200).json({
@@ -50,11 +47,9 @@ const deleteTask = asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const task = await Task.findOneAndDelete({ _id: id });
 
-    if (!task) {
-      return res.status(404).json({
-        message: "Task does not exist",
-      })
-    }
+  if (!task) {
+    return next(new CustomError(404, "Task does not exist"));
+  }
 
   res.status(201).json({ task, message: "Deleted Successfully!" });
 })
