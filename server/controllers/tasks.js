@@ -25,8 +25,23 @@ async function createTask(req, res, next) {
   }
 }
 
-function getTask(req, res, next) {
-  res.end("get task");
+async function getTask(req, res, next) {
+  try {
+    const { id } = req.params;
+    const task = await Task.findOne({ _id: id });
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Task does not exist",
+      })
+    }
+
+    res.status(201).json({ task });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
 }
 
 function updateTask(req, res, next) {
