@@ -14,5 +14,18 @@
 
 ## Front End
 
-![](https://github.com/AshishS-1123/express-mongoose-tasks/blob/master/screenshot.png?raw=true)
 ![](https://user-images.githubusercontent.com/64722310/147952533-45e3f69d-ef46-4d30-adec-de29468529f8.png)
+
+## How to Use
+
+- Clone this repo. Don't forget to star it :)
+- Change directory into the project, then into the server folder.
+- Install all dependencies using 
+```yarn install```
+or
+```npm install```
+- Create a new config.env file using the .env.example file. Add your own mongo db url.
+- Start the server using
+```yarn dev```
+or
+```npm run dev```
