@@ -15,7 +15,7 @@ const errorHandler = require("./middleware/errorHandler")
 const connectDB = require("./config/configDB")
 
 // Static files
-app.use(express.static("public/"));
+app.use(express.static("./public/"));
 
 // Middleware
 app.use(express.json());
