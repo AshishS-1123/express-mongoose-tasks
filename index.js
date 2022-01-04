@@ -1,5 +1,5 @@
 // Setup environment variables.
-require("dotenv").config({ path: "./config.env" })
+// require("dotenv").config({ path: "./config.env" })
 
 // Create a new Express App
 const express = require("express");
@@ -36,7 +36,7 @@ const startServer = async () => {
     console.log("Connected to Database ...")
 
     // Start to server.
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT || 80, () => {
       console.log(`Listen on port ${process.env.PORT} ...`);
     })
   } catch (error) {
