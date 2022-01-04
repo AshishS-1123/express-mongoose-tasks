@@ -58,7 +58,7 @@ taskContainer.addEventListener("click", (event) => {
 
       editorIdInput.value = data.task._id;
       editorNameInput.value = data.task.name;
-      editorCompletedInput.value = data.task.completed;
+      editorCompletedInput.checked = data.task.completed;
       taskEditor.dataset.task = String(taskId);
     })
   }
@@ -68,7 +68,7 @@ editorSubmitButton.addEventListener("click", (event) => {
   event.preventDefault();
 
   const newTaskName = editorNameInput.value;
-  const newCompleted = editorCompletedInput.value;
+  const newCompleted = editorCompletedInput.checked;
   const taskId = taskEditor.dataset.task;
   const body = {
     name: newTaskName,
@@ -152,9 +152,9 @@ async function makeRequest(url, method, body) {
 }
 
 // Just creates the HTML for the new task.
-function createNewTask(name, itemId, taskId) {
+function createNewTask(name, itemId, taskId, completed = false) {
   return `<div class="task" id=${"task_" + itemId}>
-      <h5>${name}</h5 >
+      <h5 class=${completed ? "strike_text" : ""}>${name}</h5 >
     <div>
       <button data-type="B" data-item=${itemId} data-task=${taskId}>Edit</button>
       <button data-type="D" data-item=${itemId} data-task=${taskId}>Delete</button>
@@ -166,7 +166,8 @@ function getAllTasks() {
   makeRequest("/tasks", "GET", null).then(({ data }) => {
     let innerHTML = "";
     data.tasks.forEach((item, idx) => {
-      innerHTML += createNewTask(item.name, task_id + idx, item._id);
+      console.log(item);
+      innerHTML += createNewTask(item.name, task_id + idx, item._id, item.completed);
     })
 
     task_id += data.tasks.length;
