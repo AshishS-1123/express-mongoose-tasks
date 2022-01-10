@@ -1,4 +1,4 @@
-const URL = "http://localhost:3000/api/v1";
+const URL = "https://intense-shelf-68915.herokuapp.com/api/v1";
 let task_id = 0;
 
 // DOM Element for creating tasks.
